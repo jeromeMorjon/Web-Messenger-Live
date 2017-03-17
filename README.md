@@ -76,7 +76,7 @@ You can access to the user list if you add the block user-list
     <!-- UserLIst -->
     <h3>UserList Connected:</h3>
     <ul id="user_list" class="nav nav-list">
-        <li class="nav-header">Connectés</li>
+        <li class="nav-header">Connected</li>
     </ul>           
 </div
 ```
