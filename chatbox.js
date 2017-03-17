@@ -10,6 +10,8 @@ var myID = randomStr();
 var myUserName = null;
 var currentDate = new Date();
 var now = currentDate.getHours() + "h" + currentDate.getMinutes();
+
+
 /*
 *
 * Connect to server
