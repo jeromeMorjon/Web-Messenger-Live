@@ -69,6 +69,18 @@ Other dependencies if you want to notify the web browser
 3) Then Go to ```chatbox.js``` 
 and edit with your address server  ```var socket = io.connect('http://localhost:8890');```
 
+### User List
+You can access to the user list if you add the block user-list
+```HTML
+<div class="col-sm-4">
+    <!-- UserLIst -->
+    <h3>UserList Connected:</h3>
+    <ul id="user_list" class="nav nav-list">
+        <li class="nav-header">Connectés</li>
+    </ul>           
+</div
+```
+
 ##### Run the server
 launch your shell and go in the folder
 run this commande : 
