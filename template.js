@@ -11,8 +11,9 @@ function chatTemplate(title, room)
     strChat += "<div id="+room+" class=\"col-md-4 col-xs-12 chat-window\">";
     strChat += "                    <div class=\" panel panel-default\">";
     strChat += "                        <div class=\"panel-heading top-bar\">";
+    strChat += "                                <a href=\"#\" style=\" float: right;\"><span class=\"glyphicon glyphicon-log-out icon_logout\" d><\/span><\/a>";
     strChat += "                                <a href=\"#\" style=\" float: right;\"><span id=\"minim_chat_window\" class=\"glyphicon glyphicon-minus icon_minim\"><\/span><\/a>";
-    strChat += "                                <a href=\"#\" style=\" float: right;\"><span class=\"glyphicon glyphicon-remove icon_close\" data-id=\"chat_window_1\"><\/span><\/a>";
+    strChat += "                                <a href=\"#\" style=\" float: right;\"><span class=\"glyphicon glyphicon-remove icon_close\" ><\/span><\/a>";
     strChat += "                            <h3 class=\"panel-title\"><span class=\"glyphicon glyphicon-comment\"><\/span> "+title+"<\/h3>";
     strChat += "                        <\/div>";
     strChat += "                        <div class=\"panel-body msg_container_base\">";
@@ -32,15 +33,7 @@ function chatTemplate(title, room)
     return strChat;
 }
 
-/*
-*
-* Listener to close the chat window
-*
-*/
-$(document).on('click', '.icon_close', function (e) {
 
-    $(this).closest(".chat-window").remove();
-});
 
 
 /*

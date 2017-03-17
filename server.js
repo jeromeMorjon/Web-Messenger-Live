@@ -65,10 +65,10 @@ io.on('connection', function (socket) {
 	else
 		usernames[username] = username; // add the client's username to the global list
 
-	//informe qu'un utilisateur vient de se connecter
+	//send the user list
 	io.sockets.emit('user-list', usernames); 
 
-	//informe qu'un utilisateur vient de se connecter
+	//inform evrybody
 	socket.broadcast.emit('user-logged', socket.username);
 
 });
@@ -123,11 +123,11 @@ rooms.push(roomID);
 
 //emit to the other friend to join me
 socket.broadcast.emit('addedToRoom', roomID, nickName); 
-console.log(socket.username+" a rejoint la room:", roomID);
+console.log(socket.username+" join room: ", roomID);
 }
 else // room exist
 {
-	console.log("room existe deja dans la liste: ", roomID);
+	console.log("room already exist in : ", roomID);
 	console.log('rooms:', rooms);
 }
 
@@ -141,8 +141,6 @@ console.log("etat de la room:", socket.adapter.rooms[roomID]);
 }); 
 
 
-
-
 /*
 *
 * Send a Message to everybody
@@ -154,6 +152,8 @@ console.log("etat de la room:", socket.adapter.rooms[roomID]);
 socket.on('newMessage', function(roomID, msg){
 	console.log("message recu:", msg);
 	socket.broadcast.emit('newMessage', roomID, msg, socket.username);
+	//send the user list
+	io.sockets.emit('user-list', usernames);
 });
 
 /*
@@ -165,7 +165,12 @@ socket.on('newMessage', function(roomID, msg){
 * 
 */
 socket.on('leaveRoom', function(roomID){
+	var msg = socket.username+" has leave the discussion.";
+
 	socket.leave(roomID);
+	socket.broadcast.emit('SYSTEM', roomID, msg);
+	//send the user list
+	io.sockets.emit('user-list', usernames);
 });
 
 
@@ -194,6 +199,12 @@ socket.on('likeThumb', function(roomID)
 socket.on('disconnect', function(){
 // remove the username from global usernames list
 console.log(socket.username+'a disconnect. room: '+socket.room+' is now closed');
+
+var msg = socket.username+" is now disconnected";
+socket.broadcast.emit('SYSTEM', null, msg);
+//send the user list
+io.sockets.emit('user-list', usernames);
+
 delete usernames[socket.username];
 socket.leave(socket.room);
 });

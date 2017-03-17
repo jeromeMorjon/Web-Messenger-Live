@@ -5,11 +5,11 @@
 *
 */
 var arr_chatWindow = []; // Array to store your room
+var arr_userList; //userlists
 var myID = randomStr();
 var myUserName = null;
 var currentDate = new Date();
-var now = currentDate.getHours() + "h"  
-                + currentDate.getMinutes();
+var now = currentDate.getHours() + "h" + currentDate.getMinutes();
 /*
 *
 * Connect to server
@@ -70,6 +70,7 @@ socket.on('user-list', function (list) {
                 '\')">'+list[user]+'</a></li>'); // display all name without mind
         }
     }
+    arr_userList  = list;
 });
 
 
@@ -116,6 +117,50 @@ socket.on('newMessage', function (room, msg, username) {
 });
 
 
+/*
+*
+* Display a system message
+*
+* @Param : 
+* - room:  string object, room chat to display the msg  -- if null, all room must to display the msg
+* - username : string name of the user who sent you the msg
+*/
+socket.on('SYSTEM', function (room, msg) {
+
+    var $contener;
+    if(room)
+    {
+        //get the room
+        var $room = $("#"+room);
+
+        var chatInfos = arr_chatWindow.find(function(e){
+           return e.id == room;
+        });
+
+        if(chatInfos != null)
+        {
+             $contener = $room.find(".msg_container_base") 
+            
+        }
+    }
+    else
+    {
+        $contener = $(".msg_container_base");
+    }
+
+
+    $contener.append('<div class="row msg_container base_receive"> \
+                <div class="col-md-12 col-xs-12"> \
+                    <div class="messages"> \
+                        <p>'+msg+'</p> \
+                    </div>\
+                </div>\
+            </div>');
+    $(".msg_container_base").scrollTo(90000);
+
+});
+
+
 
 /*
 *
@@ -157,6 +202,8 @@ socket.on('likeThumb', function (room, username) {
         addMsg(room, msg, username);
 });
 
+
+
 /*
 *
 * Minimise the window
@@ -176,6 +223,16 @@ $(document).on('click', '.panel-heading span.icon_minim', function (e) {
     }
 });
 
+/*
+*
+* Listener to close the chat window
+* Leave the room too
+*
+*/
+$(document).on('click', '.icon_close', function (e) {
+    $(this).closest(".chat-window").remove();
+});
+
 
 $(document).on('focus', '.panel-footer input.chat_input', function (e) {
     var $this = $(this);
@@ -184,6 +241,21 @@ $(document).on('focus', '.panel-footer input.chat_input', function (e) {
         $('#minim_chat_window').removeClass('panel-collapsed');
         $('#minim_chat_window').removeClass('glyphicon-plus').addClass('glyphicon-minus');
     }
+});
+
+
+/*
+*
+* Listener to display more option for the chat window
+* Leave the room too
+*
+*/
+$(document).on('click', '.icon_logout', function (e) {
+    var r = confirm("Do you want to leave this discussion ?");
+    if (r == true) {
+        socket.emit('leaveRoom', $(this).closest(".chat-window").attr('id'));
+    }
+    $(this).closest(".chat-window").remove();
 });
 
 
@@ -203,7 +275,7 @@ $(document).on('submit', '.form_txtfield', function(e){
 
     // send the message to server
     socket.emit('newMessage', $roomChat, $message);
-    
+
     // search the good field
     if($(this).parents().find("input").is(":focus") && $focus_field.val() != "") 
     {
