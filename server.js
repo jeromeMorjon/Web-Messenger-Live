@@ -32,7 +32,7 @@ var server = http.createServer(function(req, res) {
 * load socket io
 *
 */
-var io = require('/Users/jerome 1/node_modules/socket.io').listen(server);
+var io = require('/Path/to/socket.io').listen(server);
 
 /*
 *
